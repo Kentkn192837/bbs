@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
   <form action="<?php print htmlspecialchars( $_SERVER['PHP_SELF'], ENT_QUOTES, 'UTF-8' ); ?>" method="post">
