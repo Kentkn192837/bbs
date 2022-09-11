@@ -15,3 +15,19 @@ services:
     # 80 ポートをコンテナの 80 ポートに割り当て
     ports:
       - "80:80"
+
+  # PostgreSQL
+    myapp-db:
+      container_name: myapp-db
+      image: postgres:12
+      # 適宜変更してください
+      environment:
+        POSTGRES_DB: sampledb
+        POSTGRES_USER: sample-user
+        POSTGRES_PASSWORD: hi2mi4i6
+      volumes:
+        - "./initdb:/docker-entrypoint-initdb.d"
+      # Windows 用「A5M2」で接続したいため
+      # (ローカルから接続しない場合は不要です)
+      ports:
+        - "5432:5432"
