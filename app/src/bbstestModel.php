@@ -11,41 +11,42 @@ $err_msg2 = ""; //本文が入力されていない時に呼び出されるエ�
 
 $message = ""; //書き込みに成功した時に呼び出されるメッセージ
 
-if ( isset($_POST["send"] ) ===  true ) {
+if (!isset($_POST["send"])) {
+    return;
+}
 
-    if ( $name === "") $name = "名無し";
-    if ( $comment  === "" ) $err_msg2 = "本文を入力してください";
+if ( $name === "") $name = "名無し";
+if ( $comment  === "" ) $err_msg2 = "本文を入力してください";
 
-    $name = trim( $name );
-    $comment = trim( $comment );
+$name = trim( $name );
+$comment = trim( $comment );
 
-    if ( mb_strlen($name, "UTF-8") > 20 ) $err_msg1 = "名前は20文字以内にしてください";
-    if ( mb_strlen($comment, "UTF-8") > 300 ) $err_msg2 = "本文は300文字以内にしてください";
+if ( mb_strlen($name, "UTF-8") > 20 ) $err_msg1 = "名前は20文字以内にしてください";
+if ( mb_strlen($comment, "UTF-8") > 300 ) $err_msg2 = "本文は300文字以内にしてください";
 
-    if ( $err_msg1 === "" && $err_msg2 === "" ) {
-        try
-        {
-            $date = date("Y-m-d H:i:s");
-            $pdo = getDB();
-            $pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
+if ( $err_msg1 === "" && $err_msg2 === "" ) {
+    try
+    {
+        $date = date("Y-m-d H:i:s");
+        $pdo = getDB();
+        $pdo->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
 
-            $stt = $pdo->prepare('INSERT INTO test(name, comment, date) VALUES(:name, :comment, :date)');
-            $stt->bindValue(':name', $name);
-            $stt->bindValue(':comment', $comment);
-            $stt->bindValue(':date', $date);
-            $stt->execute();
+        $stt = $pdo->prepare('INSERT INTO test(name, comment, date) VALUES(:name, :comment, :date)');
+        $stt->bindValue(':name', $name);
+        $stt->bindValue(':comment', $comment);
+        $stt->bindValue(':date', $date);
+        $stt->execute();
 
-            //$message = "<p>書き込みに成功しました。</p>";
-        }
-        catch (PDOException $e)
-        {
-            $message = "<p>接続エラー: " . $e->getMessage() . "</p>";
-            die();
-        }
-        finally
-        {
-            $pdo = null;
-        }
+        //$message = "<p>書き込みに成功しました。</p>";
+    }
+    catch (PDOException $e)
+    {
+        $message = "<p>接続エラー: " . $e->getMessage() . "</p>";
+        die();
+    }
+    finally
+    {
+        $pdo = null;
     }
 }
 
@@ -79,4 +80,4 @@ finally
     $pdo = null;
 }
 
- ?>
+?>
